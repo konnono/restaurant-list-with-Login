@@ -19,10 +19,15 @@ app.get('/', (req, res) => {
 })
 
 app.get('/restaurants/:restaurant_id', (req, res) => {
-  console.log(req.params.restaurant_id)
   const restaurant = restaurantList.find(restaurant => restaurant.id.toString() === req.params.restaurant_id)
-  console.log(restaurant)
   res.render('show', { restaurant: restaurant })
+})
+
+app.get('/search', (req, res) => {
+  const keyword = req.query.keyword
+  // look for keyword in name or category
+  const restaurantSearched = restaurantList.filter(restaurant => restaurant.name.toLowerCase().includes(keyword.toLowerCase()) || restaurant.category.toLowerCase().includes(keyword.toLowerCase()))
+  res.render('index', { restaurants: restaurantSearched, keyword: keyword })
 })
 
 // listen to server
