@@ -78,6 +78,13 @@ header {
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
+.bottom-button{
+  margin: 0 auto;
+  max-width: 680px;
+  padding: 20px 30px;
+  text-align: center;
+}
+
 @media screen and (max-width: 992px) {
   
   .card img{

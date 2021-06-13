@@ -2,6 +2,7 @@
 const express = require('express')
 const exphbs = require('express-handlebars')
 const mongoose = require('mongoose')
+const bodyParser = require('body-parser')
 const Restaurant = require('./models/restaurant.js')
 const app = express()
 const port = 3000
@@ -15,6 +16,8 @@ db.once('open', () => {
   console.log('mongodb connected!')
 })
 
+app.use(bodyParser.urlencoded({ extended: true }))
+
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars');
 
@@ -26,12 +29,30 @@ app.get('/', (req, res) => {
   Restaurant.find()
     .lean()
     .then(restaurants => res.render('index', { restaurants }))
-    .catch(error => console.log('error occured'))
+    .catch(error => console.log(error))
+})
+
+app.get('/restaurants/new', (req, res) => {
+  res.render('new')
+})
+
+app.post('/restaurants', (req, res) => {
+  return Restaurant.create({
+    name: req.body.name,
+    name_en: req.body.name_en,
+    category: req.body.category,
+    image: req.body.image,
+    location: req.body.location,
+    phone: req.body.phone,
+    google_map: req.body.google_map,
+    rating: req.body.rating,
+    description: req.body.description,
+  })
+    .then(() => res.redirect('./'))
+    .catch(error => console.log(error))
 })
 
 app.get('/restaurants/:id', (req, res) => {
-  // const restaurant = restaurantList.find(restaurant => restaurant.id.toString() === req.params.restaurant_id)
-  // res.render('show', { restaurant: restaurant })
   const id = req.params.id
   return Restaurant.findById(id)
     .lean()
@@ -39,24 +60,16 @@ app.get('/restaurants/:id', (req, res) => {
     .catch(error => console.log(error))
 })
 
-// app.get('/todos/:id', (req, res) => {
-//   const id = req.params.id
-//   return Todo.findById(id)
-//     .lean()
-//     .then((todo) => res.render('detail', { todo }))
-//     .catch(error => console.log(error))
+// app.get('/search', (req, res) => {
+//   const keyword = req.query.keyword.trim()
+//   // look for keyword in name or category
+//   const restaurantSearched = restaurantList.filter(restaurant => restaurant.name.toLowerCase().includes(keyword.toLowerCase()) || restaurant.category.toLowerCase().includes(keyword.toLowerCase()))
+//   if (restaurantSearched.length === 0) {
+//     res.render('notfound', { keyword: keyword })
+//   } else {
+//     res.render('index', { restaurants: restaurantSearched, keyword: keyword })
+//   }
 // })
-
-app.get('/search', (req, res) => {
-  const keyword = req.query.keyword.trim()
-  // look for keyword in name or category
-  const restaurantSearched = restaurantList.filter(restaurant => restaurant.name.toLowerCase().includes(keyword.toLowerCase()) || restaurant.category.toLowerCase().includes(keyword.toLowerCase()))
-  if (restaurantSearched.length === 0) {
-    res.render('notfound', { keyword: keyword })
-  } else {
-    res.render('index', { restaurants: restaurantSearched, keyword: keyword })
-  }
-})
 
 // listen to server
 app.listen(port, () => {
