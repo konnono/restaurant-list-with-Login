@@ -15,8 +15,18 @@
         </div>
         <div class="form-group">
           <label for="category">分類</label>
-          <input type="text" class="form-control" id="category" name="category" aria-describedby="restaurantCategory"
-            placeholder="請輸入餐廳分類…" value="{{restaurant.category}}" required>
+          <input list="categories" class="form-control" name="category" id="category" placeholder="請輸入餐廳分類…"
+            value="{{restaurant.category}}" required>
+          <datalist id="categories">
+            <option>中東料理</option>
+            <option>中式餐廳</option>
+            <option>日本料理</option>
+            <option>南洋料理</option>
+            <option>義式餐廳</option>
+            <option>美式餐廳</option>
+            <option>酒吧</option>
+            <option>咖啡</option>
+          </datalist>
         </div>
         <div class="form-group">
           <label for="image">圖片連結</label>
