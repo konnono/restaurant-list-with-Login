@@ -2,12 +2,12 @@
 const express = require('express')
 const exphbs = require('express-handlebars')
 const mongoose = require('mongoose')
+const Restaurant = require('./models/restaurant.js')
 const app = express()
 const port = 3000
 
 mongoose.connect('mongodb://localhost/restaurant-db', { useNewUrlParser: true, useUnifiedTopology: true })
 const db = mongoose.connection
-
 db.on('error', () => {
   console.log('mongodb error!')
 })
@@ -21,12 +21,12 @@ app.set('view engine', 'handlebars');
 // load static files
 app.use(express.static('public'))
 
-// load restaurant json file
-const restaurantList = require('./restaurant.json').results
-
 // set routing paths
 app.get('/', (req, res) => {
-  res.render('index', { restaurants: restaurantList })
+  Restaurant.find()
+    .lean()
+    .then(restaurants => res.render('index', { restaurants }))
+    .catch(error => console.log('error occured'))
 })
 
 app.get('/restaurants/:restaurant_id', (req, res) => {
