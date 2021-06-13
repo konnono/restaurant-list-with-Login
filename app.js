@@ -29,10 +29,23 @@ app.get('/', (req, res) => {
     .catch(error => console.log('error occured'))
 })
 
-app.get('/restaurants/:restaurant_id', (req, res) => {
-  const restaurant = restaurantList.find(restaurant => restaurant.id.toString() === req.params.restaurant_id)
-  res.render('show', { restaurant: restaurant })
+app.get('/restaurants/:id', (req, res) => {
+  // const restaurant = restaurantList.find(restaurant => restaurant.id.toString() === req.params.restaurant_id)
+  // res.render('show', { restaurant: restaurant })
+  const id = req.params.id
+  return Restaurant.findById(id)
+    .lean()
+    .then(restaurant => res.render('show', { restaurant }))
+    .catch(error => console.log(error))
 })
+
+// app.get('/todos/:id', (req, res) => {
+//   const id = req.params.id
+//   return Todo.findById(id)
+//     .lean()
+//     .then((todo) => res.render('detail', { todo }))
+//     .catch(error => console.log(error))
+// })
 
 app.get('/search', (req, res) => {
   const keyword = req.query.keyword.trim()
