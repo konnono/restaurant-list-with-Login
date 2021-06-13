@@ -95,16 +95,20 @@ app.post('/restaurants/:id/delete', (req, res) => {
     .catch(error => console.log(error))
 })
 
-// app.get('/search', (req, res) => {
-//   const keyword = req.query.keyword.trim()
-//   // look for keyword in name or category
-//   const restaurantSearched = restaurantList.filter(restaurant => restaurant.name.toLowerCase().includes(keyword.toLowerCase()) || restaurant.category.toLowerCase().includes(keyword.toLowerCase()))
-//   if (restaurantSearched.length === 0) {
-//     res.render('notfound', { keyword: keyword })
-//   } else {
-//     res.render('index', { restaurants: restaurantSearched, keyword: keyword })
-//   }
-// })
+app.get('/search', (req, res) => {
+  const keyword = req.query.keyword.trim()
+  return Restaurant.find({ "$or": [{ "name": { $regex: keyword, $options: 'i' } }, { "category": { $regex: keyword, $options: 'i' } }] })
+    .lean()
+    .then((restaurants) => {
+      if (restaurants.length === 0) {
+        res.render('notfound', { keyword: keyword })
+      } else {
+        res.render('index', { restaurants, keyword: keyword })
+      }
+    })
+    .catch((error) => console.log(error))
+})
+
 
 // listen to server
 app.listen(port, () => {
