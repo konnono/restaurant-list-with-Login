@@ -1,16 +1,23 @@
-<!-- search bar -->
+<!-- search & sort bar -->
 <div class="container search-bar">
   <div class="search-bar-outer">
     <div class="search-bar-inner">
-      <form action="/search">
-        <h4 class="mb-2">尋找餐廳：</h4>
-        <div class="input-group">
+      <form action="/search" class="row">
+        <h4 class="mb-2 col-12">尋找餐廳：</h4>
+        <div class="input-group col-8">
           <input type="text" name="keyword" class="form-control" placeholder="輸入餐廳、分類" aria-label="Restaurant Name..."
             value="{{keyword}}" aria-describedby="search-button">
           <div class="input-group-append">
             <button class="btn btn-major" type="submit" id="search-button"><i class="fas fa-search"></i></button>
           </div>
         </div>
+        <select class="form-control col-4" name="sortBy" onchange="this.form.submit()">
+          <option value=" _id">排序方式</option>
+          <option value="rating_d" {{#if (eq sortBy 'rating_d' )}} selected {{/if}}>評分高->低</option>
+          <option value="rating_a" {{#if (eq sortBy 'rating_a' )}} selected {{/if}}>評分低->高</option>
+          <option value="location" {{#if (eq sortBy 'location' )}} selected {{/if}}>地區</option>
+          <option value="category" {{#if (eq sortBy 'category' )}} selected {{/if}}>類別</option>
+        </select>
       </form>
     </div>
   </div>
@@ -18,7 +25,10 @@
 
 <!-- restaurant list -->
 <div class="container mt-5">
-  <div class="row">
+  {{!-- <div class="row">
+    <div class="col"></div>
+  </div> --}}
+  <div class="column">
     <div class="col-md-10 col-12 mx-auto">
       <div class="card-columns">
         {{#each restaurants}}

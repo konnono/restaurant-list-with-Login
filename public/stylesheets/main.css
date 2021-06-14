@@ -35,6 +35,7 @@ header {
   color: #9b4b4b;
 }
 
+
 .form-control::placeholder {
   color: #aaaaaa;
   font-size: 0.8rem;

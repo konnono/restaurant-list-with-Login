@@ -68,19 +68,5 @@ router.delete('/:id', (req, res) => {
     .catch(error => console.log(error))
 })
 
-router.get('/search', (req, res) => {
-  const keyword = req.query.keyword.trim()
-  return Restaurant.find({ "$or": [{ "name": { $regex: keyword, $options: 'i' } }, { "category": { $regex: keyword, $options: 'i' } }] })
-    .lean()
-    .then((restaurants) => {
-      if (restaurants.length === 0) {
-        res.render('notfound', { keyword: keyword })
-      } else {
-        res.render('index', { restaurants, keyword: keyword })
-      }
-    })
-    .catch((error) => console.log(error))
-})
-
 // 匯出路由模組
 module.exports = router

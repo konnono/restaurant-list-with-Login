@@ -4,6 +4,10 @@ const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
 
+const Handlebars = require('handlebars');
+const H = require('just-handlebars-helpers');
+H.registerHelpers(Handlebars);
+
 require('./config/mongoose')
 const Restaurant = require('./models/restaurant.js')
 const routes = require('./routes')
