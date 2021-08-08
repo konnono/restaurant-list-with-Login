@@ -10,12 +10,15 @@ const Handlebars = require('handlebars');
 const H = require('just-handlebars-helpers');
 H.registerHelpers(Handlebars);
 
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+
 require('./config/mongoose')
 const usePassport = require('./config/passport')
 
 const app = express()
 const routes = require('./routes')
-const port = 3000
 
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
@@ -25,7 +28,7 @@ app.use(methodOverride('_method'))
 app.use(express.static('public'))
 
 app.use(session({
-  secret: 'ThisIsMySecret',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true
 }))
@@ -43,6 +46,6 @@ app.use((req, res, next) => {
 app.use(routes)
 
 // listen to server
-app.listen(port, () => {
-  console.log(`Express server is listening on localhost:${port}`)
+app.listen(process.env.PORT, () => {
+  console.log(`Express server is listening on port:${process.env.PORT}`)
 })
