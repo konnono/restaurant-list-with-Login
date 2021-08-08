@@ -23,15 +23,19 @@
             width="30" height="30" class="d-inline-block align-top" alt="我的餐廳清單">
           我的餐廳清單
         </a>
+        {{#if isAuthenticated}}
+        <a href="/users/logout" class="btn btn-outline-dark">登出</a>
+        {{else}}
+        <a href="/users/login" class="btn btn-outline-dark">登入</a>
+        {{/if}}
       </div>
     </nav>
     <div class="banner"></div>
   </header>
 
-  <!-- partial templates will replase the part of "body" here-->
   {{{ body }}}
 
-  <!-- include javasctip files here -->
+  <!-- include javascript files here -->
   <script src="/javascripts/jquery-3.3.1.js"></script>
   <script src="/javascripts/popper.js"></script>
   <script src="/javascripts/bootstrap.js"></script>
