@@ -1,21 +1,54 @@
-const rt = require('../restaurant.js')
+const bcrypt = require('bcryptjs')
+
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+
+const Restaurant = require('../restaurant')
+const User = require('../user')
 const db = require('../../config/mongoose')
 
-const restaurantList = require('./restaurant.json').results
+const restaurantList = require('./restaurant.json')
+
+const SEED_USERS = [
+  {
+    email: 'user1@example.com',
+    password: '12345678',
+    restaurants: restaurantList.slice(0, 3)
+  },
+  {
+    email: 'user2@example.com',
+    password: '12345678',
+    restaurants: restaurantList.slice(3, 6)
+  }
+]
 
 db.once('open', () => {
-  for (let i = 0; i < restaurantList.length; i++) {
-    rt.create({
-      name: restaurantList[i].name,
-      name_en: restaurantList[i].name_en,
-      category: restaurantList[i].category,
-      image: restaurantList[i].image,
-      location: restaurantList[i].location,
-      phone: restaurantList[i].phone,
-      google_map: restaurantList[i].google_map,
-      rating: restaurantList[i].rating,
-      description: restaurantList[i].description
+  return Promise.all(SEED_USERS.map(async user => {
+    const rtList = user.restaurants
+    await User.create({
+      email: user.email,
+      password: bcrypt.hashSync(user.password, bcrypt.genSaltSync(10))
     })
-  }
-  console.log('done')
+      .then(user => {
+        return Promise.all(rtList.map(async restaurant => {
+          await Restaurant.create({
+            name: restaurant.name,
+            name_en: restaurant.name_en,
+            category: restaurant.category,
+            image: restaurant.image,
+            location: restaurant.location,
+            phone: restaurant.phone,
+            google_map: restaurant.google_map,
+            rating: restaurant.rating,
+            description: restaurant.description,
+            userID: user._id
+          })
+        }))
+      })
+  }))
+    .then(() => {
+      console.log('done!')
+      process.exit()
+    })
 })
