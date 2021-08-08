@@ -10,6 +10,8 @@ const H = require('just-handlebars-helpers');
 H.registerHelpers(Handlebars);
 
 require('./config/mongoose')
+const usePassport = require('./config/passport')
+
 const Restaurant = require('./models/restaurant.js')
 const routes = require('./routes')
 
@@ -24,6 +26,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }))
+usePassport(app)
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
