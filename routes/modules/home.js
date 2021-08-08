@@ -6,7 +6,8 @@ const router = express.Router()
 const Restaurant = require('../../models/restaurant.js')
 
 router.get('/', (req, res) => {
-  Restaurant.find()
+  const userID = req.user._id
+  Restaurant.find({ userID })
     .lean()
     .then(restaurants => res.render('index', { restaurants }))
     .catch(error => console.log(error))
@@ -14,8 +15,9 @@ router.get('/', (req, res) => {
 
 router.get('/search', (req, res) => {
   const keyword = req.query.keyword.trim()
+  const userID = req.user._id
   const sortBy = req.query.sortBy
-  return Restaurant.find({ "$or": [{ "name": { $regex: keyword, $options: 'i' } }, { "category": { $regex: keyword, $options: 'i' } }] })
+  return Restaurant.find({ userID, "$or": [{ "name": { $regex: keyword, $options: 'i' } }, { "category": { $regex: keyword, $options: 'i' } }] })
     .lean()
     .sort(sortMethod(sortBy))
     .then((restaurants) => {
