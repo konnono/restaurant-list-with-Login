@@ -13,9 +13,12 @@
 - 「刪除」可以將點選的餐廳從我的私藏中移除
 - 「建立新餐廳」可以新增餐廳到我的私藏名單中
 
+## Heroku 網址
+[https://dry-basin-33794.herokuapp.com/](https://dry-basin-33794.herokuapp.com/)
+
 ## 畫面截圖
-![首頁](https://github.com/konnono/my-restaurant-list/blob/main/A8-cover_page.png)
-![介紹頁](https://github.com/konnono/my-restaurant-list/blob/main/A6-detail_page.png)
+![登入頁](https://github.com/konnono/restaurant-list-with-Login/blob/main/public/image/A1-login_page.png)
+![首頁](https://github.com/konnono/restaurant-list-with-Login/blob/main/public/image/A1-cover_page.png)
 
 ## 安裝方式
 複製檔案
